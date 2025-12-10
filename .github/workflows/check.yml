@@ -1,0 +1,27 @@
+name: Check TikTok Live
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Запускать каждые 30 минут
+  workflow_dispatch:      # Кнопка для ручного запуска
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install libraries
+        run: pip install TikTokLive requests
+
+      - name: Run checker script
+        env:
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_ID: ${{ secrets.TG_ID }}
+        run: python main.py
